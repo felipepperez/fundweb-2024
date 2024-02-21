@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form>
+        <label for="email">E-mail: </label>
+        <input id="email" type="email">
+        <br>
+        <label for="color">Cor: </label>
+        <input id="color" type="color">
+        <br>
+        <label for="tel">Telefone: </label>
+        <input id="tel" placeholder="(XX)XXXX-XXXX" pattern="\(?\d{2}\)\d{4}-\d{4}" required type="tel">
+        <br>
+        <label for="cpf">CPF: </label>
+        <input id="cpf" placeholder="XXX.XXX.XXX-XX" pattern="\d{3}.\d{3}.\d{3}-\d{2}" required type="text">
+        <br>
+        <label for="image">Imagem: </label>
+        <input id="image" accept="image/*" onchange="atualizarImagem(this.value)" type="file">
+        <br>
+        <img src="#" alt="Imagem" width="200" id="imagem">
+        <br>
+        <fieldset>
+            <legend>Estado Civil</legend>
+            <label><input type="radio" name="estCivil" value="Casado"> Casado</label>
+            <label><input type="radio" name="estCivil" value="Solteiro"> Solteiro</label>
+        </fieldset>
+        <br>
+        <fieldset>
+            <legend>Estado Emocional</legend>
+            <label><input type="radio" name="estEmocional" value="Carente"> Carente</label>
+            <label><input type="radio" name="estEmocional" value="Feliz"> Feliz</label>
+        </fieldset>
+        <br>
+        <fieldset>
+            <legend>Estado Civil</legend>
+            <label><input type="checkbox" name="estCivilCheck" value="Casado"> Casado</label>
+            <label><input type="checkbox" name="estCivilCheck" value="Carente"> Carente</label>
+            <label><input type="checkbox" name="estCivilCheck" value="Solteiro"> Solteiro</label>
+            <label><input type="checkbox" name="estCivilCheck" value="Feliz"> Feliz</label>
+        </fieldset>
+        <br>
+        <label>
+            O que você deseja pesquisar?
+            <input type="search">
+        </label>
+        <br>
+        <label>
+            Digite sua sugestão:<br>
+            <textarea cols="30" rows="5"></textarea>
+        </label>
+        <br>
+        <select name="carros" required="required">
+            <optgroup label="1 Esportivos">
+                <option value="1.1">Ferrari
+                <option value="1.2">Porche
+                <option value="1.3">Lamborghini
+            <optgroup label="2 Popular">
+                <option value="2.1">Corsa
+                <option value="2.2">Uno
+                <option value="2.3">Gol
+                <option value="2.4">Palio
+        </select>
+        <br>
+        <input type="submit">
+    </form>
+    <br>
+    <form onsubmit="return false;" oninput="calcular()">
+        <label>
+            <input id="valueOne" type="number">+<input id="valueTwo" type="number">=<output id="result"></output>
+        </label>
+    </form>
+    <script>
+        function atualizarImagem(caminho) {
+            console.log(caminho);
+            document.getElementById('imagem').src = 'https://s.zst.com.br/cms-assets/2023/01/kratos-capa.webp';
+        }
+        function calcular() {
+            let a = document.getElementById('valueOne').value;
+            let b = document.getElementById('valueTwo').value;
+
+            document.getElementById('result').value = Number(a) + Number(b);
+        }
+    </script>
+
+</body>
+
+</html>
