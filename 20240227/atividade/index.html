@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form>
+        <label for="cep">CEP: </label>
+        <input id="cep" placeholder="XXXXX-XXX" pattern="\d{5}-\d{3}" required type="text">
+    </form>
+    <form>
+        <label for="nome">Nome: </label>
+        <input id="nome" type="text">
+        <label for="cidade">Cidade: </label>
+        <input id="cidade" type="text">
+        <input value="Preencher campos" ondblclick="preencher()" type="button">
+    </form>
+    <script>
+        function preencher(){
+            document.getElementById("nome").value = "Ana Luiza";
+            document.getElementById("cidade").value = "São Paulo";
+        }
+    </script>
+</body>
+</html>
