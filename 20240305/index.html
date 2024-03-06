@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body onload="startGame()">
+
+    <div style="text-align: center; width: 480px;">
+        <button onmousedown="moveUp()" ontouchstart="moveUp()" onmouseup="stopMove()">Up</button>
+        <br><br>
+        <button onmousedown="moveLeft()" ontouchstart="moveLeft()" onmouseup="stopMove()">Left</button>
+        <button onmousedown="moveRight()" ontouchstart="moveRight()" onmouseup="stopMove()">Right</button>
+        <br><br>
+        <button onmousedown="moveDown()" ontouchstart="moveDown()" onmouseup="stopMove()">Down</button>
+    </div>
+    <script>
+        let redGamePiece;
+        let myObstacles = [];
+
+        function startGame() {
+            myGameArea.start();
+            myScore = new component("30px", "Consolas", "black", 280, 40, "text");
+            redGamePiece = new component(30, 30, "red", 10, 10);
+        }
+
+        function updataGameArea() {
+            let x, y;
+            for (i = 0; i < myObstacles.length; i += 1) {
+                if (redGamePiece.crashWith(myObstacles[i])) {
+                    myGameArea.stop();
+                    return;
+                }
+            }
+            myGameArea.clear();
+            myGameArea.frameNo += 1;
+
+            if (myGameArea.frameNo == 1 || everyInterval(150)) {
+                x = myGameArea.canvas.width;
+                minHeight = 20;
+                maxHeight = 200;
+                height = Math.floor(Math.random() * (maxHeight - minHeight + 1) + minHeight);
+                minGap = 50;
+                maxGap = 200;
+                gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap);
+                myObstacles.push(new component(10, height, "green", x, 0));
+                myObstacles.push(new component(10, x - height - gap, "green", x, height + gap));
+            }
+
+            for (i = 0; i < myObstacles.length; i++) {
+                myObstacles[i].x += -1;
+                myObstacles[i].update();
+            }
+
+            myScore.text = "SCORE: " + myGameArea.frameNo;
+            myScore.update();
+            redGamePiece.newPos();
+            redGamePiece.update();
+        }
+
+        let myGameArea = {
+            canvas: document.createElement("canvas"),
+            start: function () {
+                this.canvas.width = 480;
+                this.canvas.height = 270;
+                this.context = this.canvas.getContext("2d");
+                document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+                this.frameNo = 0;
+                this.interval = setInterval(updataGameArea, 20);
+                /* window.addEventListener('keydown', function (e) {
+                    myGameArea.key = e.keyCode;
+                });
+                window.addEventListener('keyup',function(e){
+                    myGameArea.key = false;
+                }) */
+            },
+            stop: function () {
+                clearInterval(this.interval);
+            },
+            clear: function () {
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            }
+        }
+
+        function component(width, height, color, x, y, type) {
+            this.type = type;
+            this.width = width;
+            this.height = height;
+            this.x = x;
+            this.y = y;
+            this.speedX = 0;
+            this.speedY = 0;
+            this.update = function () {
+                ctx = myGameArea.context;
+                ctx.fillStyle = color;
+                if (this.type == "text") {
+                    ctx.font = this.width + " " + this.height;
+                    ctx.fillText(this.text, this.x, this.y);
+                } else {
+                    ctx.fillRect(this.x, this.y, this.width, this.height);
+                }
+            }
+            this.newPos = function () {
+                this.x += this.speedX;
+                this.y += this.speedY;
+            }
+            this.crashWith = function (otherObj) {
+                let myLeft = this.x;
+                let myRight = this.x + (this.width);
+                let myTop = this.y;
+                let myBottom = this.y + (this.height);
+                let otherLeft = otherObj.x;
+                let otherRight = otherObj.x + (otherObj.width);
+                let otherTop = otherObj.y;
+                let otherBottom = otherObj.y + (otherObj.height);
+                let crash = true;
+                if ((myBottom < otherTop) || (myTop > otherBottom) || (myRight < otherLeft) || (myLeft > otherRight)) {
+                    crash = false;
+                }
+                return crash;
+            }
+        }
+
+        function updateFrameArea() {
+            if (redGamePiece.crashWith(obstacle)) {
+                myGameArea.stop();
+            } {
+                myGameArea.clear();
+                /* redGamePiece.speedX = 0;
+                redGamePiece.speedY = 0;
+                if(myGameArea.key && myGameArea.key==37){
+                    moveLeft();
+                }
+                if(myGameArea.key && myGameArea.key==39){
+                    moveRight();
+                }
+                if(myGameArea.key && myGameArea.key==38){
+                    moveUp();
+                }
+                if(myGameArea.key && myGameArea.key==40){
+                    moveDown();
+                } */
+                redGamePiece.newPos();
+                redGamePiece.update();
+            }
+        }
+
+        function moveUp() {
+            redGamePiece.speedY -= 1;
+        }
+
+        function moveDown() {
+            redGamePiece.speedY += 1;
+        }
+
+        function moveLeft() {
+            redGamePiece.speedX -= 1;
+        }
+
+        function moveRight() {
+            redGamePiece.speedX += 1;
+        }
+
+        function stopMove() {
+            redGamePiece.speedX = 0;
+            redGamePiece.speedY = 0;
+        }
+
+        function everyInterval(n) {
+            if ((myGameArea.frameNo / n) % 1 == 0) { return true; }
+            return false;
+        }
+    </script>
+</body>
+
+</html>
