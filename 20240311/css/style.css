@@ -1,0 +1,41 @@
+p{
+    background-color: yellow;
+    color: red;
+    word-spacing: 10px;
+    background-image: url('../imgs/transferir.png');
+    border-style: solid;
+    border-color: white;
+    border-width: 20px;
+    border-radius: 20px;
+}
+
+body{
+    background-image: url('../imgs/calma-calabreso.avif');
+}
+
+#primeiro{
+    color: #7fffd4;
+    font-size: large;
+}
+
+.paragrafo{
+    font-size: xx-large;
+}
+
+li{
+    font-size: xx-large;
+    color: white;
+}
+
+li.selected{
+    color: green;
+}
+
+table{
+    font-size: large;
+    color: white;
+}
+
+tr > td:first-child{
+    color: red;
+}
