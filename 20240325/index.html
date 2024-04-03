@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="name">
+    <script>
+        function capital(value){
+            return value.toUpperCase();
+        }
+
+        window.addEventListener('load',()=>{
+            document.getElementById('name').addEventListener('keyup',function(){
+                this.value = capital(this.value);
+            })
+        })
+    </script>
+</body>
+</html>

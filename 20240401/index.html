@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        .actions {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="light-blue lighten-1">
+        <div class="nav-wrapper">
+            <a href="#!" class="brand-logo">CRUD</a>
+        </div>
+    </nav>
+
+
+
+
+    <div class="container">
+        <!-- Page Content goes here -->
+        <div class="row">
+            <form class="col s12">
+                <div class="row center">
+                    <div class="input-field col s4">
+                        <input id="first_name" type="text">
+                        <label for="first_name">First Name</label>
+                    </div>
+                    <div class="input-field col s4">
+                        <input id="last_name" type="text">
+                        <label for="last_name">Last Name</label>
+                    </div>
+                    <div class="input-field col s4">
+                        <a id="save_button" class="waves-effect waves-light btn"><i
+                                class="material-icons left">save</i>save</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="row">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody id="table_body">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('save_button').addEventListener('click', () => {
+                const first_name = document.getElementById('first_name');
+                const last_name = document.getElementById('last_name');
+
+                const table_row = document.createElement('tr');
+                const table_cols = [getId(), first_name.value, last_name.value];
+                for (const col of table_cols) {
+                    const table_col = document.createElement('td');
+                    table_col.innerHTML = col;
+                    table_row.appendChild(table_col);
+                }
+                const table_col = document.createElement('td');
+                const icon_edit = document.createElement('i');
+                icon_edit.classList.add('material-icons');
+                icon_edit.classList.add('actions');
+                icon_edit.textContent = 'edit';
+                const icon_delete = document.createElement('i');
+                icon_delete.classList.add('material-icons');
+                icon_delete.classList.add('actions');
+                icon_delete.textContent = 'delete';
+
+                const actions = [icon_edit, icon_delete];
+                for (const action of actions) {
+                    action.addEventListener('click', function () {
+                        console.log(this.textContent);
+                    })
+                    table_col.append(action);
+                }
+                table_row.append(table_col);
+
+                document.getElementById('table_body').appendChild(table_row);
+                first_name.value = '';
+                last_name.value = '';
+                M.updateTextFields();
+            })
+        });
+
+        function getId() {
+            const table_body = document.getElementById('table_body');
+            const table_rows = table_body.getElementsByTagName('tr');
+            let major = 0;
+            for (const row of table_rows) {
+                const table_cols = row.getElementsByTagName('td');
+                const number = parseInt(table_cols[0].innerText);
+                major = number > major ? number : major;
+            }
+            return major + 1;
+        }
+    </script>
+</body>
+
+</html>
