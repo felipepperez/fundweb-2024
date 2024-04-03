@@ -22,9 +22,6 @@
         </div>
     </nav>
 
-
-
-
     <div class="container">
         <!-- Page Content goes here -->
         <div class="row">
@@ -67,10 +64,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('save_button').addEventListener('click', () => {
-                const first_name = document.getElementById('first_name');
-                const last_name = document.getElementById('last_name');
+            const first_name = document.getElementById('first_name');
+            const last_name = document.getElementById('last_name');
+            const button = document.getElementById('save_button');
 
+            button.addEventListener('click', function () {
+                switch (this.querySelector('i').innerText) {
+                    case 'save':
+                        create();
+                        break;
+                    case 'edit':
+                        edit();
+                        break;
+                }
+            })
+
+            function create() {
                 const table_row = document.createElement('tr');
                 const table_cols = [getId(), first_name.value, last_name.value];
                 for (const col of table_cols) {
@@ -91,7 +100,25 @@
                 const actions = [icon_edit, icon_delete];
                 for (const action of actions) {
                     action.addEventListener('click', function () {
-                        console.log(this.textContent);
+                        const row = this.parentNode.parentNode;
+                        switch (this.textContent) {
+                            case 'edit':
+                                const cols = row.getElementsByTagName('td');
+                                first_name.value = cols[1].innerText;
+                                last_name.value = cols[2].innerText;
+                                M.updateTextFields();
+
+                                const icon = button.querySelector('i');
+                                icon.innerText = 'edit';
+                                button.innerText = '';
+                                button.appendChild(icon);
+                                button.append('edit');
+                                button.dataset.id = cols[0].innerText;
+                                break;
+                            case 'delete':
+                                document.getElementById('table_body').removeChild(row);
+                                break;
+                        }
                     })
                     table_col.append(action);
                 }
@@ -101,20 +128,48 @@
                 first_name.value = '';
                 last_name.value = '';
                 M.updateTextFields();
-            })
+            }
+
+            function edit() {
+                const table_body = document.getElementById('table_body');
+                const table_rows = table_body.getElementsByTagName('tr');
+                let editRow;
+                for (const row of table_rows) {
+                    const table_cols = row.getElementsByTagName('td');
+                    if (table_cols[0].innerText == button.dataset.id) {
+                        editRow = row;
+                        break;
+                    }
+                }
+                const editCols = editRow.getElementsByTagName('td');
+                editCols[1].innerText = first_name.value;
+                editCols[2].innerText = last_name.value;
+
+                first_name.value = '';
+                last_name.value = '';
+                M.updateTextFields();
+
+                const icon = button.querySelector('i');
+                icon.innerText = 'save';
+                button.innerText = '';
+                button.appendChild(icon);
+                button.append('save');
+                delete button.dataset.id;
+            }
+
+            function getId() {
+                const table_body = document.getElementById('table_body');
+                const table_rows = table_body.getElementsByTagName('tr');
+                let major = 0;
+                for (const row of table_rows) {
+                    const table_cols = row.getElementsByTagName('td');
+                    const number = parseInt(table_cols[0].innerText);
+                    major = number > major ? number : major;
+                }
+                return major + 1;
+            }
         });
 
-        function getId() {
-            const table_body = document.getElementById('table_body');
-            const table_rows = table_body.getElementsByTagName('tr');
-            let major = 0;
-            for (const row of table_rows) {
-                const table_cols = row.getElementsByTagName('td');
-                const number = parseInt(table_cols[0].innerText);
-                major = number > major ? number : major;
-            }
-            return major + 1;
-        }
     </script>
 </body>
 
