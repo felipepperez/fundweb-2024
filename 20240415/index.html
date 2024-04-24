@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="light-blue lighten-1">
+        <div class="nav-wrapper">
+            <a href="#!" class="brand-logo">Médias</a>
+        </div>
+    </nav>
+    <div class="container">
+        <!-- Page Content goes here -->
+        <div class="row">
+            <form class="col s12">
+                <div class="row center">
+                    <div class="input-field col s4">
+                        <input class="note" id="first_note" type="text" value="5">
+                        <label for="first_note">Primeira Nota</label>
+                    </div>
+                    <div class="input-field col s4">
+                        <input class="note" id="second_note" type="text" value="5">
+                        <label for="second_note">Segunda Nota</label>
+                    </div>
+                    <div class="input-field col s4">
+                        <input class="note" id="third_note" type="text" value="5">
+                        <label for="third_note">Terceira Nota</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <select id="select">
+                            <option value="" disabled>Selecione uma média</option>
+                            <option value="1" selected>Aritimética</option>
+                            <option value="2">Ponderada</option>
+                            <option value="3">Harmônica</option>
+                        </select>
+                        <label>Médias</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <a id="calc_button" class="waves-effect waves-light btn"><i
+                                class="material-icons left">control_point</i>Calcular</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="row">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nota 1</th>
+                        <th>Nota 2</th>
+                        <th>Nota 3</th>
+                        <th>Media</th>
+                        <th>Resultado</th>
+                    </tr>
+                </thead>
+
+                <tbody id="table_body">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let medias = [
+                {
+                    value: '1', name: 'Aritimética', calc: (notes, media) => {
+                        let sum = 0;
+                        for (note of notes) {
+                            sum += note;
+                        }
+                        return sum / notes.length;
+                    }
+                },
+                {
+                    value: '2', name: 'Ponderada', weights: [5, 3, 2], calc: (notes, media) => {
+                        let sum = 0;
+                        let sum_weights = 0;
+                        for (index in notes) {
+                            sum += notes[index] * media.weights[index];
+                            sum_weights += media.weights[index];
+                        }
+                        return sum / sum_weights;
+                    }
+                },
+                {
+                    value: '3', name: 'Harmônica', calc: (notes, media) => {
+                        let sum = 0;
+                        for (note of notes) {
+                            sum += 1 / note;
+                        }
+                        return notes.length / sum;
+                    }
+                }];
+
+            let elems = document.querySelectorAll('select');
+            let instances = M.FormSelect.init(elems);
+
+            let select = document.getElementById('select');
+
+            let button = document.getElementById('calc_button');
+
+            let notes = [...document.getElementsByClassName('note')];
+
+            let table = document.getElementById('table_body');
+
+            let medias_values = medias.map((media) => media.value);
+            button.addEventListener('click', () => {
+                if (medias_values.includes(select.value)) {
+                    const notes_values = notes.map((note) => {
+                        const value = parseInt(note.value);
+                        if (!isNaN(value) && (value < 0 || value > 10)) {
+                            return NaN;
+                        }
+                        return value;
+                    });
+
+                    if (notes_values.every((value) => !isNaN(value))) {
+                        const media = medias.find((media) => media.value == select.value);
+                        const table_row = document.createElement('tr');
+                        let table_col;
+                        for (note of notes_values) {
+                            table_col = document.createElement('td');
+                            table_col.innerHTML = note;
+                            table_row.appendChild(table_col);
+                        }
+                        table_col = document.createElement('td');
+                        table_col.innerHTML = media.name;
+                        table_row.appendChild(table_col);
+                        table_col = document.createElement('td');
+                        table_col.innerHTML = media.calc(notes_values, media);
+                        table_row.appendChild(table_col);
+                        table.appendChild(table_row);
+                    }
+                }
+            })
+        });
+    </script>
+</body>
+
+</html>
